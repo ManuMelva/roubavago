@@ -1,0 +1,196 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API-Cancela-Reserva",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/CancelaReserva/{id_reserva}": {
+      "get": {
+        "tags": [
+          "Cancelamento"
+        ],
+        "summary": "Retorna uma reserva pelo ID.",
+        "description": "Retorna uma reserva.",
+        "parameters": [
+          {
+            "name": "id_reserva",
+            "in": "path",
+            "description": "reserva ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cancelamento"
+                },
+                "example": {
+                  "DataC": "Mon, 01 Jan 2024 00:00:00 GMT",
+                  "Id": 1,
+                  "Id_hotel": 1,
+                  "Id_quarto": 1,
+                  "Id_reserva": 2
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Erro ao consultar o cancelamento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Cancelamento não encontrado com esse ID"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cancelamento"
+        ],
+        "summary": "Cancela uma reserva pelo ID.",
+        "description": "Cancela uma reserva.",
+        "parameters": [
+          {
+            "name": "id_reserva",
+            "in": "path",
+            "description": "Reserva ID",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cancelamento"
+                },
+                "example": {
+                    "DataC": "Mon, 01 Jan 2024 00:00:00 GMT",
+                    "Id": 1,
+                    "Id_hotel": 1,
+                    "Id_quarto": 1,
+                    "Id_reserva": 2
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Erro ao realizar a cancelamento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "Erro ao cancelar, reserva com esse ID não foi encontrada"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Cancelamento": {
+        "required": [
+          "Id",
+          "Id_reserva",
+          "Id_hotel",
+          "Id_quarto",
+          "DataC"
+        ],
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer",
+            "format": "int32",
+            "minLength": 1,
+            "nullable": false
+          },
+          "Id_reserva": {
+            "type": "integer",
+            "format": "int32",
+            "minLength": 1,
+            "nullable": false
+          },
+          "Id_hotel": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1,
+            "nullable": false
+          },
+          "Id_quarto": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1,
+            "nullable": false
+          },
+          "DataC": {
+            "type": "string",
+            "format": "date-time",
+            "minLength": 1,
+            "nullable": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
