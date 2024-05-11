@@ -27,38 +27,6 @@ class HotelModel(db.Model):
     address = db.Column(db.String(100), nullable=False)
 
 
-db.create_all()
-db.session.add(HotelModel(
-    name="Hotel California",
-    city="Los Angeles",
-    address="1670 Ocean Avenue"
-))
-db.session.add(HotelModel(
-    name="Hotel Transylvania",
-    city="Hunedoara",
-    address="Piața Iuliu Maniu, no. 11"
-))
-db.session.add(HotelModel(
-    name="The Plaza",
-    city="New York",
-    address="Fifth Avenue at Central Park South"
-))
-db.session.add(HotelModel(
-    name="The Ritz",
-    city="London",
-    address="221B Baker Street"
-))
-db.session.add(HotelModel(
-    name="Raffles",
-    city="London",
-    address="4 Privet Drive"
-))
-db.session.add(HotelModel(
-    name="La Mamounia",
-    city="Hobbiton",
-    address="Bag End, Bagshot Row, Westfarthing, the Shire, Middle-Earth"
-))
-db.session.commit()
 
 hotel_put_args = reqparse.RequestParser()
 hotel_put_args.add_argument("name", type=str, help="Name is required")
@@ -151,7 +119,38 @@ api.add_resource(Hotel, "/hotels/<int:hotel_id>")
 api.add_resource(Hotels, "/hotels/")
 
 if __name__ == "__main__":
-    host = "127.0.0.1"
-    port = "5000"
-    debug = True
-    app.run(host=host, port=port, debug=debug)
+    with app.app_context():
+        debug = True
+        db.create_all()
+        db.session.add(HotelModel(
+            name="Hotel California",
+            city="Los Angeles",
+            address="1670 Ocean Avenue"
+        ))
+        db.session.add(HotelModel(
+            name="Hotel Transylvania",
+            city="Hunedoara",
+            address="Piața Iuliu Maniu, no. 11"
+        ))
+        db.session.add(HotelModel(
+            name="The Plaza",
+            city="New York",
+            address="Fifth Avenue at Central Park South"
+        ))
+        db.session.add(HotelModel(
+            name="The Ritz",
+            city="London",
+            address="221B Baker Street"
+        ))
+        db.session.add(HotelModel(
+            name="Raffles",
+            city="London",
+            address="4 Privet Drive"
+        ))
+        db.session.add(HotelModel(
+            name="La Mamounia",
+            city="Hobbiton",
+            address="Bag End, Bagshot Row, Westfarthing, the Shire, Middle-Earth"
+        ))
+        db.session.commit()
+        app.run(host="127.0.0.1", port=5000)
