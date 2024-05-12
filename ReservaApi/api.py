@@ -129,8 +129,8 @@ def reservar():
         return jsonify({'error': 'Faltando body ou parametros'}), 400
 
     try:
-        dataInicio = datetime.strptime(dataIni, "%Y-%m-%d %H:%M:%S").date()
-        dataFinal = datetime.strptime(dataFin, "%Y-%m-%d %H:%M:%S").date()
+        dataInicio = datetime.strptime(dataIni, "%Y-%m-%d").date()
+        dataFinal = datetime.strptime(dataFin, "%Y-%m-%d").date()
     except ValueError as err:
         return jsonify({'error': 'Formato de data invalida, deve ser "2000-12-25 23:59:59"'}), 400
 

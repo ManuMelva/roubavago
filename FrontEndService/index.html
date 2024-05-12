@@ -52,6 +52,7 @@
 							<nav id="fh5co-menu-wrap" role="navigation">
 								<ul class="sf-menu" id="fh5co-primary-menu">
 									<li><a class="active" href="index.html">Home</a></li>
+									<li><a class="active" href="cancelaReserva.html">Cancelar Reserva</a></li>
 								</ul>
 							</nav>
 						</div>
@@ -110,9 +111,9 @@
 				<div class="container">
 					<div class="row">
 						<div id="availability">
-							<form action="#">
+							<form id="hotel-availability-form">
 								<div class="a-col">
-									<section>
+										<section>
 										<select id="hotel-select" class="cs-select cs-skin-border" title="hotel-select">
 											<option value="" disabled selected>Selecione o Hotel</option>
 										</select>
@@ -127,11 +128,11 @@
 								<div class="a-col alternate">
 									<div class="input-field">
 										<label for="date-end">Check Out</label>
-										<input type="text" class="form-control" id="date-end" />
+										<input type="text" class="form-control" id="date-end"/>
 									</div>
 								</div>
 								<div class="a-col action">
-									<a href="quartos.html">
+									<a type="submit" id="check-availability-link">
 										<span>Checar</span>
 										Disponível
 									</a>
