@@ -1,0 +1,6 @@
+@QuartoService_HostAddress = http://localhost:5138
+
+GET {{QuartoService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
