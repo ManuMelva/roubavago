@@ -1,6 +1,8 @@
 const urlParams = new URLSearchParams(window.location.search);
 const hotelId = urlParams.get('hotelId');
 const roomId = urlParams.get('roomId');
+let hotel;
+let quarto;
 
 async function getNamesHotelQuarto() {
     const apiUrl = `http://127.0.0.1:5000/api/hotels/${hotelId}`;
@@ -11,8 +13,8 @@ async function getNamesHotelQuarto() {
         const reponseQuarto = await fetch(apiQuartoUrl);
 
         if (response.ok && reponseQuarto.ok) {
-            const hotel = await response.json();
-            const quarto = await reponseQuarto.json();
+            hotel = await response.json();
+            quarto = await reponseQuarto.json();
 
             const hotelContainer = document.getElementById('container');
 
@@ -53,6 +55,29 @@ bookingForm.addEventListener('submit', async (event) => {
     });
 
     if (!response.ok) {
+      throw new Error(`API request failed with status ${response.json()}`);
+    }
+
+    const dataEmail = {
+      email: formData.get('email'),
+      name: formData.get('name'),
+      hotelName: hotel.name,
+      checkIn: formData.get('checkIn'),
+      checkOut: formData.get('checkOut'),
+      numeroQuarto: quarto.numeroQuarto,
+      hotelEndereco: hotel.address,
+      hotelCidade: hotel.city
+    };
+
+    const responseEmail = await fetch('http://127.0.0.1:5111/api/Emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', 
+      },
+      body: JSON.stringify(dataEmail),
+    });
+
+    if (!responseEmail.ok) {
       throw new Error(`API request failed with status ${response.json()}`);
     }
 

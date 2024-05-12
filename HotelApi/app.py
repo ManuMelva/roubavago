@@ -80,9 +80,9 @@ class Hotels(Resource):
         db.session.add(hotel)
         db.session.commit()
 
-        API_URL = "http://localhost:5138/api/quartos/hotel"
+        API_URL = "http://localhost:5138/api/Quartos/hotel"
         try:
-            requests.post(API_URL, timeout=0.001, json=toDict(hotel))
+            requests.post(API_URL, json=toDict(hotel))
         except requests.exceptions.ConnectionError:
             # abort(400, message=f"Couldn't connect to {API_URL}")
             pass
