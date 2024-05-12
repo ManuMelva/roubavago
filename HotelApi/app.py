@@ -3,6 +3,7 @@ from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
+import requests
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
@@ -27,7 +28,6 @@ class HotelModel(db.Model):
     address = db.Column(db.String(100), nullable=False)
 
 
-
 hotel_put_args = reqparse.RequestParser()
 hotel_put_args.add_argument("name", type=str, help="Name is required")
 hotel_put_args.add_argument("city", type=str, help="City is required")
@@ -44,6 +44,15 @@ resource_fields = {
     'city': fields.String,
     'address': fields.String
 }
+
+
+def toDict(hotel):
+    return {
+        'id': hotel.id,
+        'name': hotel.name,
+        'city': hotel.city,
+        'address': hotel.address
+    }
 
 
 class Hotels(Resource):
@@ -70,6 +79,13 @@ class Hotels(Resource):
         hotel = HotelModel(name=args['name'], city=args['city'], address=args['address'])
         db.session.add(hotel)
         db.session.commit()
+
+        API_URL = "http://localhost:5138/api/quartos/hotel"
+        try:
+            requests.post(API_URL, timeout=0.001, json=toDict(hotel))
+        except requests.exceptions.ConnectionError:
+            # abort(400, message=f"Couldn't connect to {API_URL}")
+            pass
         return hotel, 201
 
 
@@ -103,16 +119,16 @@ class Hotel(Resource):
 
         return result, 200
 
-    @marshal_with(resource_fields)
-    def delete(self, hotel_id):
-        result = HotelModel.query.filter_by(id=hotel_id).first()
-        if not result:
-            abort(404, message="Hotel doesn't exist, cannot delete")
-
-        db.session.delete(result)
-        db.session.commit()
-
-        return "", 204
+    # @marshal_with(resource_fields)
+    # def delete(self, hotel_id):
+    #     result = HotelModel.query.filter_by(id=hotel_id).first()
+    #     if not result:
+    #         abort(404, message="Hotel doesn't exist, cannot delete")
+    #
+    #     db.session.delete(result)
+    #     db.session.commit()
+    #
+    #     return "", 204
 
 
 api.add_resource(Hotel, "/hotels/<int:hotel_id>")

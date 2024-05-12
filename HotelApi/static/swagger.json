@@ -230,43 +230,6 @@
             }
           }
         }
-      },
-      "delete": {
-        "tags": [
-          "Hotels"
-        ],
-        "summary": "Remove an existing hotel by ID.",
-        "description": "Removes an existing hotel and returns an empty body.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Hotel ID",
-            "required": true,
-            "style": "simple",
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "message": "Hotel doesn't exist, cannot delete"
-                }
-              }
-            }
-          }
-        }
       }
     }
   },
