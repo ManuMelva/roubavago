@@ -1,0 +1,259 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API-Hotel",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/reservar/{idhotel}/{idquarto}": {
+      "get": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Consultar reservas.",
+        "description": "Returna uma lista com todas as reservas para um hotel e quarto especifico",
+        "parameters": [
+          {
+            "name": "idhotel",
+            "in": "path",
+            "description": "ID do hotel",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          },
+
+          {
+            "name": "idquarto",
+            "in": "path",
+            "description": "ID do quarto",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],"responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Reserva"
+                  }
+                },
+                "example": [
+                 {
+                    "dataFin": "Fri, 05 Jan 2024 00:00:00 GMT",
+                    "dataIni": "Mon, 01 Jan 2024 00:00:00 GMT",
+                    "idreserva": 1,
+                    "idhotel": 1,
+                    "idquarto": 1
+                },
+                {
+                    "dataFin": "Wed, 10 Jan 2024 00:00:00 GMT",
+                    "dataIni": "Sat, 06 Jan 2024 00:00:00 GMT",
+                    "idreserva": 2,
+                    "idhotel": 1,
+                    "idquarto": 1
+                }
+                ]
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "message": "Reserva não encontrada"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservar": {
+        "post": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Criar uma nova reserva",
+        "description": "Cria uma nova reserva e retorna o objeto em json",
+        "requestBody": {
+          "description": "Reserva Object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reserva"
+              },
+              "example": {
+                  "idhotel": 1,
+                  "idquarto": 1,
+                  "dataIni": "2024-01-01 00:00:00",
+                  "dataFin": "2024-01-06 00:00:00"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reserva"
+                },
+                "example": {
+                    "dataFin": "Sat, 06 Jan 2024 00:00:00 GMT",
+                    "dataIni": "Mon, 01 Jan 2024 00:00:00 GMT",
+                    "idreserva": 1,
+                    "idhotel": 1,
+                    "idquarto": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "message": "Faltando body ou parametros"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "message": "Conflito de datas, nao foi possivel reservar"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservar/{idreserva}": {
+      "delete": {
+        "tags": [
+          "Reservas"
+        ],
+        "summary": "Deleta uma reserva por ID",
+        "description": "Utilizado apenas pela api de cancelamento para excluir reservas",
+        "parameters": [
+          {
+            "name": "idreserva",
+            "in": "path",
+            "description": "ID da reserva",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reserva"
+                },
+                "example": {
+                    "dataFin": "Sat, 06 Jan 2024 00:00:00 GMT",
+                    "dataIni": "Mon, 01 Jan 2024 00:00:00 GMT",
+                    "idreserva": 1,
+                    "idhotel": 1,
+                    "idquarto": 1
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "message": "Reserva nao existe, nao foi possivel deletar"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Reserva": {
+        "required": [
+          "idreserva",
+          "idHotel",
+          "idQuarto",
+          "dataIni",
+          "dataFin"
+        ],
+        "type": "object",
+        "properties": {
+          "idreserva": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          },
+          "idHotel": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          },
+          "idQuarto": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": false
+          },
+          "dataIni": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": false
+          },
+          "dataFin": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
