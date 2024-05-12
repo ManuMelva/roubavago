@@ -13,6 +13,8 @@ namespace EmailService.Controllers
     [Route("api/[controller]")]
     public class EmailsController: ControllerBase
     {
+        private readonly double min = 100.0;
+        private readonly double max = 1500.0;
         private readonly IConfiguration _configuration;
 
         public EmailsController(IConfiguration configuration)
@@ -28,7 +30,7 @@ namespace EmailService.Controllers
                 var email = new MimeMessage();
                 email.From.Add(new MailboxAddress(_configuration["EmailSettings:FromName"], _configuration["EmailSettings:FromEmail"]));
                 email.To.Add(new MailboxAddress(emailSetting.Email, emailSetting.Email));
-                email.Subject = "Reserva do Quarto Tal";
+                email.Subject = "Reserva do Quarto " + emailSetting.NumeroQuarto;
                 email.Priority = MessagePriority.Urgent;
 
                 StringBuilder sb = new();
@@ -94,37 +96,32 @@ namespace EmailService.Controllers
 
                 sb.AppendLine("    <div class=\"details\">");
                 sb.AppendLine("      <p class=\"label\">Prezado(a):</p>");
-                //sb.AppendLine("      <p class=\"value\">" + guestName + "</p>");
+                sb.AppendLine("      <p class=\"value\">" + emailSetting.Name + "</p>");
 
                 sb.AppendLine("      <p class=\"label\">Detalhes da Reserva:</p>");
                 sb.AppendLine("      <ul>");
-                //sb.AppendLine("        <li><span class=\"label\">Hotel:</span> " + hotelName + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Data de Chegada:</span> " + arrivalDate + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Data de Partida:</span> " + departureDate + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Nome do Hóspede:</span> " + guestName + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Número de Quartos:</span> " + numRooms + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Tipo de Quarto:</span> " + roomType + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Valor Total:</span> " + totalCost.ToString("C") + "</li>"); // Format currency
+                sb.AppendLine("        <li><span class=\"label\">Hotel:</span> " + emailSetting.HotelName + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Data de Chegada:</span> " + emailSetting.CheckIn + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Data de Partida:</span> " + emailSetting.CheckOut + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Nome do Hóspede:</span> " + emailSetting.Name + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Número de Quartos:</span> " + emailSetting.NumeroQuarto + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Valor Total:</span> " + (new Random().NextDouble() * (max - min) + min).ToString("C") + "</li>");
                 sb.AppendLine("      </ul>");
                 sb.AppendLine("    </div>");
 
                 sb.AppendLine("    <div class=\"information\">");
                 sb.AppendLine("      <p class=\"label\">Informações do Hotel:</p>");
                 sb.AppendLine("      <ul>");
-                //sb.AppendLine("        <li><span class=\"label\">Endereço:</span> " + hotelAddress + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Telefone:</span> " + hotelPhone + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">E-mail:</span> " + hotelEmail + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Endereço:</span> " + emailSetting.HotelEndereco + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Cidade:</span> " + emailSetting.HotelCidade + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">E-mail:</span> " + _configuration["EmailSettings:Username"] + "</li>");
                 sb.AppendLine("      </ul>");
-                sb.AppendLine("    </div>");
-
-                sb.AppendLine("    <div class=\"notes\">");
-                //sb.AppendLine("      <p>" + notes + "</p>");  // Insert your notes here
                 sb.AppendLine("    </div>");
 
                 sb.AppendLine("    <div class=\"footer\">");
                 sb.AppendLine("      <p>Agradecemos sua escolha e esperamos recebê-lo(a) em breve!</p>");
                 sb.AppendLine("      <p>Atenciosamente,</p>");
-                //sb.AppendLine("      <p>Equipe do " + hotelName + "</p>");
+                sb.AppendLine("      <p>Equipe do " + emailSetting.HotelName + "</p>");
 
                 sb.AppendLine("      <p>P.S.: Para garantir sua reserva, pedimos que responda a este e-mail confirmando sua chegada.</p>");
                 sb.AppendLine("    </div>");
@@ -136,7 +133,6 @@ namespace EmailService.Controllers
                 {
                     Text = sb.ToString()
                 };
-                //MimeMessage is ready, now send the Email.
                 using (var client = new SmtpClient())
                 {
                     client.Connect(_configuration["EmailSettings:Host"],Int32.Parse(_configuration["EmailSettings:Port"]));
@@ -227,22 +223,15 @@ namespace EmailService.Controllers
 
                 sb.AppendLine("    <div class=\"details\">");
                 sb.AppendLine("      <p class=\"label\">Prezado(a):</p>");
-                //sb.AppendLine("      <p class=\"value\">" + guestName + "</p>");
+                sb.AppendLine("      <p class=\"value\">" + emailSetting.Name + "</p>");
 
                 sb.AppendLine("      <p class=\"label\">Detalhes do cancelamento:</p>");
                 sb.AppendLine("      <ul>");
-                //sb.AppendLine("        <li><span class=\"label\">Hotel:</span> " + hotelName + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Data de Chegada:</span> " + arrivalDate + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Data de Partida:</span> " + departureDate + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Nome do Hóspede:</span> " + guestName + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Número de Quartos:</span> " + numRooms + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Tipo de Quarto:</span> " + roomType + "</li>");
-                //sb.AppendLine("        <li><span class=\"label\">Valor Total:</span> " + totalCost.ToString("C") + "</li>"); // Format currency
+                sb.AppendLine("        <li><span class=\"label\">Hotel:</span> " + emailSetting.HotelName + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Nome do Hóspede:</span> " + emailSetting.Name + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Número de Quartos:</span> " + emailSetting.NumeroQuarto + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Valor Total:</span> " + new Random().NextDouble() * (max - min) + min.ToString("C") + "</li>"); // Format currency
                 sb.AppendLine("      </ul>");
-                sb.AppendLine("    </div>");
-
-                sb.AppendLine("    <div class=\"notes\">");
-                //sb.AppendLine("      <p>" + notes + "</p>");  // Insert your notes here
                 sb.AppendLine("    </div>");
 
                 sb.AppendLine("    <div class=\"footer\">");
@@ -258,7 +247,6 @@ namespace EmailService.Controllers
                 {
                     Text = sb.ToString()
                 };
-                //MimeMessage is ready, now send the Email.
                 using (var client = new SmtpClient())
                 {
                     client.Connect(_configuration["EmailSettings:Host"],Int32.Parse(_configuration["EmailSettings:Port"]));
