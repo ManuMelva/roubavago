@@ -157,7 +157,7 @@ namespace EmailService.Controllers
                 var email = new MimeMessage();
                 email.From.Add(new MailboxAddress(_configuration["EmailSettings:FromName"], _configuration["EmailSettings:FromEmail"]));
                 email.To.Add(new MailboxAddress(emailSetting.Email, emailSetting.Email));
-                email.Subject = "Cancelametno da Reserva do Quarto Tal";
+                email.Subject = "Cancelametno da Reserva";
                 email.Priority = MessagePriority.Urgent;
 
                 StringBuilder sb = new();
@@ -230,7 +230,7 @@ namespace EmailService.Controllers
                 sb.AppendLine("        <li><span class=\"label\">Hotel:</span> " + emailSetting.HotelName + "</li>");
                 sb.AppendLine("        <li><span class=\"label\">Nome do Hóspede:</span> " + emailSetting.Name + "</li>");
                 sb.AppendLine("        <li><span class=\"label\">Número de Quartos:</span> " + emailSetting.NumeroQuarto + "</li>");
-                sb.AppendLine("        <li><span class=\"label\">Valor Total:</span> " + new Random().NextDouble() * (max - min) + min.ToString("C") + "</li>"); // Format currency
+                sb.AppendLine("        <li><span class=\"label\">Valor Total:</span> " + (new Random().NextDouble() * (max - min) + min).ToString("C") + "</li>"); // Format currency
                 sb.AppendLine("      </ul>");
                 sb.AppendLine("    </div>");
 
