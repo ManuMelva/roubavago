@@ -1,5 +1,6 @@
 const hotelSelect = document.getElementById('hotel-select');
 const checkAvailabilityButton = document.getElementById('check-availability-link');
+const cancelaButton = document.getElementById('cancelar-link');
 const dateStartInput = document.getElementById('date-start');
 const dateEndInput = document.getElementById('date-end');
 
@@ -32,16 +33,16 @@ checkAvailabilityButton.addEventListener('click', async (event) => {
     }
 
     if (!checkInDateIsValid(dateStartInput.value)) {
-      validationErrors.push('Data de Check-in inválida. Utilize o formato AAAA-MM-DD.');
+        validationErrors.push('Data de Check-in inválida. Utilize o formato AAAA-MM-DD.');
     }
-  
+
     if (!checkOutDateIsValid(dateStartInput.value, dateEndInput.value)) {
-      validationErrors.push('Data de Check-out inválida. A data deve ser posterior ao Check-in.');
+        validationErrors.push('Data de Check-out inválida. A data deve ser posterior ao Check-in.');
     }
 
     if (validationErrors.length > 0) {
         console.error('Erros de validação:', validationErrors);
-        return; 
+        return;
     }
 
     const selectedHotelId = hotelSelect.value;
@@ -53,7 +54,7 @@ checkAvailabilityButton.addEventListener('click', async (event) => {
     url.searchParams.append('checkIn', checkIn);
     url.searchParams.append('checkOut', checkOut);
 
-    window.location.href = url.href; 
+    window.location.href = url.href;
 });
 
 function checkInDateIsValid(dateString) {
@@ -66,3 +67,36 @@ function checkOutDateIsValid(checkInDateString, checkOutDateString) {
     const checkOutDate = new Date(checkOutDateString);
     return checkOutDate > checkInDate;
 }
+
+cancelaButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const validationErrors = [];
+    if (!hotelSelect.value) {
+        validationErrors.push('Selecione um hotel da lista.');
+    }
+
+    if (!checkInDateIsValid(dateStartInput.value)) {
+        validationErrors.push('Data de Check-in inválida. Utilize o formato AAAA-MM-DD.');
+    }
+
+    if (!checkOutDateIsValid(dateStartInput.value, dateEndInput.value)) {
+        validationErrors.push('Data de Check-out inválida. A data deve ser posterior ao Check-in.');
+    }
+
+    if (validationErrors.length > 0) {
+        console.error('Erros de validação:', validationErrors);
+        return;
+    }
+
+    const selectedHotelId = hotelSelect.value;
+    const checkIn = dateStartInput.value;
+    const checkOut = dateEndInput.value;
+
+    const url = new URL('FrontEndService/cancelaReserva.html', window.location.origin);
+    url.searchParams.append('hotelId', selectedHotelId);
+    url.searchParams.append('checkIn', checkIn);
+    url.searchParams.append('checkOut', checkOut);
+
+    window.location.href = url.href;
+});

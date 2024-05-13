@@ -104,7 +104,7 @@ namespace EmailService.Controllers
                 sb.AppendLine("        <li><span class=\"label\">Data de Chegada:</span> " + emailSetting.CheckIn + "</li>");
                 sb.AppendLine("        <li><span class=\"label\">Data de Partida:</span> " + emailSetting.CheckOut + "</li>");
                 sb.AppendLine("        <li><span class=\"label\">Nome do Hóspede:</span> " + emailSetting.Name + "</li>");
-                sb.AppendLine("        <li><span class=\"label\">Número de Quartos:</span> " + emailSetting.NumeroQuarto + "</li>");
+                sb.AppendLine("        <li><span class=\"label\">Número do Quarto:</span> " + emailSetting.NumeroQuarto + "</li>");
                 sb.AppendLine("        <li><span class=\"label\">Valor Total:</span> " + (new Random().NextDouble() * (max - min) + min).ToString("C") + "</li>");
                 sb.AppendLine("      </ul>");
                 sb.AppendLine("    </div>");
