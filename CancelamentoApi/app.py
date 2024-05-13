@@ -15,7 +15,7 @@ app.register_blueprint(swaggerui_blueprint)
 
 db = SQLAlchemy(app)
 
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 class CancelamentoModel(db.Model):
