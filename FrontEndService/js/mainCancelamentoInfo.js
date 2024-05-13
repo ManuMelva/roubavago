@@ -37,6 +37,8 @@ const bookingForm = document.querySelector('form[action="/booking-confirmation"]
 bookingForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
+  const formData = new FormData(bookingForm);
+
   try {
     const response = await fetch(`http://127.0.0.1:5003/CancelaReserva/${reservaId}`, {
       method: 'POST',
